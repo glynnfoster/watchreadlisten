@@ -48,7 +48,6 @@ export async function searchMedia(type: MediaType, query: string): Promise<Searc
 }
 
 async function searchOMDB(query: string, apiKey: string): Promise<SearchResult[]> {
-  // First, search for movies/series matching the query
   const searchRes = await fetch(
     `https://www.omdbapi.com/?apikey=${apiKey}&s=${encodeURIComponent(query)}`
   );
@@ -56,13 +55,24 @@ async function searchOMDB(query: string, apiKey: string): Promise<SearchResult[]
 
   if (!searchData.Search) return [];
 
-  // For each result, fetch detailed information
   const detailedResults = await Promise.all(
     searchData.Search.map(async (item: any) => {
       const detailRes = await fetch(
         `https://www.omdbapi.com/?apikey=${apiKey}&i=${item.imdbID}`
       );
       const detail = await detailRes.json();
+
+      // Extract specific metadata
+      const metadata = {
+        actors: detail.Actors !== "N/A" ? detail.Actors : undefined,
+        runtime: detail.Runtime !== "N/A" ? detail.Runtime : undefined,
+        genre: detail.Genre !== "N/A" ? detail.Genre : undefined,
+        language: detail.Language !== "N/A" ? detail.Language : undefined,
+        imdbRating: detail.imdbRating !== "N/A" ? detail.imdbRating : undefined,
+        releaseDate: detail.Released !== "N/A" ? detail.Released : undefined,
+        totalSeasons: detail.totalSeasons !== "N/A" ? detail.totalSeasons : undefined,
+        type: detail.Type // movie or series
+      };
 
       return {
         id: detail.imdbID,
@@ -72,7 +82,7 @@ async function searchOMDB(query: string, apiKey: string): Promise<SearchResult[]
         year: detail.Year,
         summary: detail.Plot !== "N/A" ? detail.Plot : undefined,
         imageUrl: detail.Poster !== "N/A" ? detail.Poster : undefined,
-        metadata: detail
+        metadata
       };
     })
   );
@@ -88,15 +98,25 @@ async function searchGoogleBooks(query: string, apiKey: string): Promise<SearchR
 
   if (!data.items) return [];
 
-  return data.items.map((item: any) => ({
-    id: item.id,
-    title: item.volumeInfo.title,
-    creator: item.volumeInfo.authors?.[0] || "Unknown",
-    genre: item.volumeInfo.categories?.[0],
-    summary: item.volumeInfo.description,
-    imageUrl: item.volumeInfo.imageLinks?.thumbnail,
-    metadata: item
-  }));
+  return data.items.map((item: any) => {
+    // Extract specific metadata
+    const metadata = {
+      isbn: item.volumeInfo.industryIdentifiers?.[0]?.identifier,
+      publisher: item.volumeInfo.publisher,
+      publishedDate: item.volumeInfo.publishedDate,
+      category: item.volumeInfo.categories?.[0]
+    };
+
+    return {
+      id: item.id,
+      title: item.volumeInfo.title,
+      creator: item.volumeInfo.authors?.[0] || "Unknown",
+      year: item.volumeInfo.publishedDate?.split('-')[0],
+      summary: item.volumeInfo.description,
+      imageUrl: item.volumeInfo.imageLinks?.thumbnail,
+      metadata
+    };
+  });
 }
 
 async function getSpotifyAccessToken(query: string, apiKey: string): Promise<never> {
@@ -152,12 +172,25 @@ async function searchSpotify(query: string, apiKey: string): Promise<SearchResul
     return [];
   }
 
-  return data.tracks.items.map((item: any) => ({
-    id: item.id,
-    title: item.name,
-    creator: item.artists[0].name,
-    year: item.album.release_date.split('-')[0],
-    imageUrl: item.album.images[0]?.url,
-    metadata: item
-  }));
+  return data.tracks.items.map((item: any) => {
+    // Extract specific metadata
+    const metadata = {
+      releaseDate: item.album.release_date,
+      albumName: item.album.name,
+      trackNumber: item.track_number,
+      discNumber: item.disc_number,
+      durationMs: item.duration_ms,
+      explicit: item.explicit,
+      previewUrl: item.preview_url
+    };
+
+    return {
+      id: item.id,
+      title: item.name,
+      creator: item.artists[0].name,
+      year: item.album.release_date.split('-')[0],
+      imageUrl: item.album.images[0]?.url,
+      metadata
+    };
+  });
 }

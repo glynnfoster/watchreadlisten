@@ -1,6 +1,6 @@
 import { Card } from "@/components/ui/card";
-import { type Recommendation } from "@shared/schema";
-import { Music, Film, Tv, BookOpen, Gamepad2, Trash2, Info, type LucideIcon } from "lucide-react";
+import { type SearchResult } from "@/lib/api";
+import { Music, Film, Tv, BookOpen, Gamepad2, Plus, Info, type LucideIcon } from "lucide-react";
 import {
   Tooltip,
   TooltipContent,
@@ -16,16 +16,13 @@ const mediaTypeIcons: Record<string, LucideIcon> = {
   game: Gamepad2,
 };
 
-interface RecommendationCardProps {
-  recommendation: Recommendation;
-  onDelete: (id: number) => void;
+interface SearchResultCardProps {
+  result: SearchResult;
+  onAdd: (result: SearchResult) => void;
 }
 
-export default function RecommendationCard({
-  recommendation,
-  onDelete,
-}: RecommendationCardProps) {
-  const MediaIcon = mediaTypeIcons[recommendation.type] || Film;
+export default function SearchResultCard({ result, onAdd }: SearchResultCardProps) {
+  const MediaIcon = mediaTypeIcons[result.type] || Film;
 
   const getMetadataString = (metadata: Record<string, any>) => {
     const relevantFields = {
@@ -52,7 +49,7 @@ export default function RecommendationCard({
       ]
     };
 
-    const fields = relevantFields[recommendation.type] || [];
+    const fields = relevantFields[result.type] || [];
     return fields
       .map(([label, key, transform]) => {
         const value = metadata[key];
@@ -64,20 +61,18 @@ export default function RecommendationCard({
       .join('\n');
   };
 
-  const handleDelete = (e: React.MouseEvent<HTMLButtonElement>) => {
-    e.preventDefault();
+  const handleAdd = (e: React.MouseEvent) => {
     e.stopPropagation();
-    onDelete(recommendation.id);
+    onAdd(result);
   };
 
-  console.log(recommendation);
   return (
     <Card className="overflow-hidden h-full flex flex-col">
       <div className="relative">
-        {recommendation.imageUrl && (
+        {result.imageUrl && (
           <img
-            src={recommendation.imageUrl}
-            alt={recommendation.title}
+            src={result.imageUrl}
+            alt={result.title}
             className="w-full aspect-[3/2] object-cover"
           />
         )}
@@ -91,7 +86,7 @@ export default function RecommendationCard({
                 </button>
               </TooltipTrigger>
               <TooltipContent className="max-w-xs whitespace-pre-line">
-                {getMetadataString(recommendation.metadata)}
+                {getMetadataString(result.metadata)}
               </TooltipContent>
             </Tooltip>
           </TooltipProvider>
@@ -99,23 +94,23 @@ export default function RecommendationCard({
       </div>
       <div className="p-4 flex flex-col flex-1">
         <div>
-          <h3 className="font-semibold text-lg mb-1">{recommendation.title}</h3>
+          <h3 className="font-semibold text-lg mb-1">{result.title}</h3>
           <p className="text-sm text-muted-foreground">
-            {recommendation.creator} • {recommendation.year}
+            {result.creator} • {result.year}
           </p>
         </div>
-        {recommendation.summary && (
+        {result.description && (
           <p className="text-sm text-muted-foreground line-clamp-3 mt-2">
-            {recommendation.summary}
+            {result.description}
           </p>
         )}
         <div className="mt-auto pt-3">
           <button
-            onClick={handleDelete}
-            className="ml-auto block p-2 text-muted-foreground hover:text-destructive active:scale-95 transition-all rounded-md hover:bg-destructive/10"
+            onClick={handleAdd}
+            className="ml-auto block p-2 text-muted-foreground hover:text-primary active:scale-95 transition-all rounded-md hover:bg-primary/10"
             type="button"
           >
-            <Trash2 className="h-4 w-4" />
+            <Plus className="h-4 w-4" />
           </button>
         </div>
       </div>

@@ -32,3 +32,7 @@ export function saveApiCredentials(service: string, apiKey: string): void {
 export function getApiCredentials(service: string): string | null {
   return localStorage.getItem(`${service}_api_key`);
 }
+
+export function saveRecommendations(recommendations: Recommendation[]): void {
+  localStorage.setItem('recommendations', JSON.stringify(recommendations));
+}
