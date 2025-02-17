@@ -4,7 +4,7 @@ import { Button } from "@/components/ui/button";
 import { useToast } from "@/hooks/use-toast";
 import { getSavedRecommendations, deleteRecommendation, saveRecommendations } from "@/lib/storage";
 import { type Recommendation } from "@shared/schema";
-import { Settings, Plus, GripVertical } from "lucide-react";
+import { Settings, Plus, GripVertical, Github } from "lucide-react";
 import { useState, useEffect } from "react";
 import {
   DndContext,
@@ -142,6 +142,27 @@ export default function Home() {
               API Settings
             </Button>
           </Link>
+          <a
+      href="https://github.com/glynnfoster/watchreadlisten"
+      target="_blank"
+      rel="noopener noreferrer"
+      className="inline-flex items-center justify-center"
+    >
+      <svg
+        width="20"
+        height="20"
+        viewBox="0 0 24 24"
+        fill="currentColor"
+        className="text-black hover:text-gray-800 transition-colors"
+        aria-hidden="true"
+      >
+        <path
+          fillRule="evenodd"
+          clipRule="evenodd"
+          d="M12 0C5.372 0 0 5.372 0 12C0 17.303 3.438 21.8 8.208 23.385C8.807 23.493 9.026 23.138 9.026 22.835C9.026 22.562 9.015 21.993 9.01 21.2C5.672 21.889 4.968 19.375 4.968 19.375C4.422 17.972 3.634 17.625 3.634 17.625C2.546 16.936 3.713 16.951 3.713 16.951C4.909 17.044 5.503 18.204 5.503 18.204C6.575 20.086 8.29 19.586 8.95 19.281C9.065 18.502 9.374 17.969 9.708 17.663C7.078 17.357 4.345 16.276 4.345 11.64C4.345 10.313 4.82 9.222 5.625 8.35C5.501 8.044 5.086 6.795 5.737 5.103C5.737 5.103 6.706 4.775 8.999 6.337C9.89 6.096 10.83 6 11.767 6C12.704 6 13.645 6.096 14.536 6.337C16.83 4.775 17.8 5.103 17.8 5.103C18.45 6.795 18.035 8.044 17.911 8.35C18.717 9.222 19.191 10.313 19.191 11.64C19.191 16.276 16.458 17.357 13.829 17.663C14.164 17.969 14.473 18.502 14.473 19.281C14.473 20.087 15.066 21.044 16.148 21.2C16.143 21.993 16.133 22.562 16.133 22.835C16.133 23.138 16.35 23.493 16.95 23.385C21.72 21.8 25.158 17.303 25.158 12C25.158 5.372 19.786 0 13.158 0H12Z"
+        />
+      </svg>
+    </a>
         </div>
       </div>
 
