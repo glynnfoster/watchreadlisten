@@ -99,9 +99,9 @@ export default function SearchResultCard({ result, onAdd }: SearchResultCardProp
             {result.creator} • {result.year}
           </p>
         </div>
-        {result.description && (
+        {result.summary && (
           <p className="text-sm text-muted-foreground line-clamp-3 mt-2">
-            {result.description}
+            {result.summary}
           </p>
         )}
         <div className="mt-auto pt-3">
