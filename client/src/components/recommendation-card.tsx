@@ -71,16 +71,20 @@ export default function RecommendationCard({
     onDelete(recommendation.id);
   };
 
-  console.log(recommendation);
   return (
     <Card className="overflow-hidden h-full flex flex-col">
       <div className="relative">
         {recommendation.imageUrl && (
           <img
-            src={recommendation.imageUrl}
-            alt={recommendation.title}
-            className="w-full aspect-[3/2] object-cover"
-          />
+          src={recommendation.imageUrl || '/path-to-default-book-image.jpg'}
+          alt={recommendation.title || 'Book Cover'}
+          className={`${
+            recommendation.type === 'book' 
+              ? 'max-w-full max-h-48 object-cover mx-auto' 
+              : 'w-full h-48 object-cover object-top'
+          }`}
+          style={recommendation.type === 'book' ? { clipPath: 'inset(2px 0px 0px 2px)' } : {}}
+        />
         )}
         <div className="absolute top-0 right-0 p-2 flex items-center gap-2 bg-gradient-to-b from-black/50 to-transparent">
           <MediaIcon className="h-5 w-5 text-white" />
@@ -104,9 +108,9 @@ export default function RecommendationCard({
             <div className="font-semibold text-lg mb-1 flex items-center">
               <TooltipProvider>
                 <Tooltip>
-                  <TooltipTrigger>
+                  <TooltipTrigger asChild>
                     <span className="whitespace-nowrap overflow-hidden text-ellipsis">
-                      {recommendation.title.length > 27 ? `${recommendation.title.slice(0, 27)}...` : recommendation.title}
+                      {recommendation.title.length > 30 ? `${recommendation.title.slice(0, 30)}...` : recommendation.title}
                     </span>
                   </TooltipTrigger>
                   <TooltipContent className="max-w-xs whitespace-pre-line">

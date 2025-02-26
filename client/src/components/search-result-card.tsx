@@ -23,7 +23,7 @@ interface SearchResultCardProps {
 
 export default function SearchResultCard({ result, onAdd }: SearchResultCardProps) {
   const MediaIcon = mediaTypeIcons[result.type] || Film;
-
+  
   const getMetadataString = (metadata: Record<string, any>) => {
     const relevantFields = {
       movie: [
@@ -71,10 +71,15 @@ export default function SearchResultCard({ result, onAdd }: SearchResultCardProp
       <div className="relative">
         {result.imageUrl && (
           <img
-            src={result.imageUrl}
-            alt={result.title}
-            className="w-full aspect-[3/2] object-cover"
-          />
+          src={result.imageUrl || '/path-to-default-book-image.jpg'}
+          alt={result.title || 'Book Cover'}
+          className={`${
+            result.type === 'book' 
+              ? 'max-w-full max-h-48 object-cover mx-auto' 
+              : 'w-full h-48 object-cover object-top'
+          }`}
+          style={result.type === 'book' ? { clipPath: 'inset(2px 0px 0px 2px)' } : {}}
+        />
         )}
         <div className="absolute top-0 right-0 p-2 flex items-center gap-2 bg-gradient-to-b from-black/50 to-transparent">
           <MediaIcon className="h-5 w-5 text-white" />

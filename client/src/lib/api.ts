@@ -77,6 +77,7 @@ async function searchOMDB(query: string, apiKey: string): Promise<SearchResult[]
 
       return {
         id: detail.imdbID,
+        type: "movie",
         title: detail.Title,
         creator: detail.Director !== "N/A" ? detail.Director : "Unknown",
         actors: detail.Actors !== "N/A" ? detail.Actors : undefined,
@@ -111,6 +112,7 @@ async function searchGoogleBooks(query: string, apiKey: string): Promise<SearchR
 
     return {
       id: item.id,
+      type: "book",
       title: item.volumeInfo.title,
       creator: item.volumeInfo.authors?.[0] || "Unknown",
       year: item.volumeInfo.publishedDate?.split('-')[0],
@@ -186,6 +188,7 @@ async function searchSpotify(query: string, apiKey: string): Promise<SearchResul
 
     return {
       id: item.id,
+      type: "music",
       title: item.name,
       creator: item.artists[0].name,
       year: item.release_date.split('-')[0],
