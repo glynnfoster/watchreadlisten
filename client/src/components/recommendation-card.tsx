@@ -1,12 +1,13 @@
 import { Card } from "@/components/ui/card";
 import { type Recommendation } from "@shared/schema";
-import { Music, Film, Tv, BookOpen, Gamepad2, Trash2, Info, type LucideIcon } from "lucide-react";
+import { Music, Film, Tv, BookOpen, Gamepad2, Trash2, Info, ExternalLink, type LucideIcon } from "lucide-react";
 import {
   Tooltip,
   TooltipContent,
   TooltipProvider,
   TooltipTrigger,
 } from "@/components/ui/tooltip";
+// import React from 'react';
 
 const mediaTypeIcons: Record<string, LucideIcon> = {
   music: Music,
@@ -98,14 +99,21 @@ export default function RecommendationCard({
         </div>
       </div>
       <div className="p-4 flex flex-col flex-1">
-        <div>
-          <h3 className="font-semibold text-lg mb-1">{recommendation.title}</h3>
-          <p className="text-sm text-muted-foreground">
-            {recommendation.creator} • {recommendation.year}
-          </p>
+        <div className="flex items-center justify-between">
+          <div>
+            <div className="font-semibold text-lg mb-1 flex items-center">
+              {recommendation.title}
+              <a href={recommendation.url} target="_blank" rel="noopener noreferrer" className="text-blue-500 hover:underline ml-1">
+                <ExternalLink className="h-3 w-3 text-gray-500" />
+              </a>
+            </div>
+            <p className="text-sm text-muted-foreground">
+              {recommendation.creator} • {recommendation.year}
+            </p>
+          </div>
         </div>
         {recommendation.summary && (
-          <p className="text-sm text-muted-foreground line-clamp-3 mt-2">
+          <p className="text-sm text-muted-foreground line-clamp-6 mt-2">
             {recommendation.summary}
           </p>
         )}

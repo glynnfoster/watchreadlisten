@@ -8,6 +8,7 @@ interface SearchResult {
   year?: string;
   summary?: string;
   imageUrl?: string;
+  url?: string;
   metadata: Record<string, any>;
 }
 
@@ -82,6 +83,7 @@ async function searchOMDB(query: string, apiKey: string): Promise<SearchResult[]
         year: detail.Year,
         summary: detail.Plot !== "N/A" ? detail.Plot : undefined,
         imageUrl: detail.Poster !== "N/A" ? detail.Poster : undefined,
+        url: `http://www.imdb.com/Title/${detail.imdbID}`,
         metadata
       };
     })
@@ -114,6 +116,7 @@ async function searchGoogleBooks(query: string, apiKey: string): Promise<SearchR
       year: item.volumeInfo.publishedDate?.split('-')[0],
       summary: item.volumeInfo.description,
       imageUrl: item.volumeInfo.imageLinks?.thumbnail,
+      url: item.volumeInfo.infoLink,
       metadata
     };
   });
@@ -151,7 +154,7 @@ async function searchSpotify(query: string, apiKey: string): Promise<SearchResul
 
   const searchUrl = new URL('https://api.spotify.com/v1/search');
   searchUrl.searchParams.append('q', query);
-  searchUrl.searchParams.append('type', 'track');
+  searchUrl.searchParams.append('type', 'album');
   searchUrl.searchParams.append('limit', '20');
 
   const response = await fetch(searchUrl.toString(), {
@@ -168,28 +171,26 @@ async function searchSpotify(query: string, apiKey: string): Promise<SearchResul
 
   const data = await response.json();
   
-  if (!data.tracks?.items) {
+  if (!data.albums?.items) {
     return [];
   }
 
-  return data.tracks.items.map((item: any) => {
+  return data.albums.items.map((item: any) => {
     // Extract specific metadata
     const metadata = {
-      releaseDate: item.album.release_date,
-      albumName: item.album.name,
-      trackNumber: item.track_number,
-      discNumber: item.disc_number,
-      durationMs: item.duration_ms,
-      explicit: item.explicit,
-      previewUrl: item.preview_url
+      releaseDate: item.release_date,
+      albumName: item.name,
+      tracks: item.total_tracks,
+      discNumber: item.disc_number
     };
 
     return {
       id: item.id,
       title: item.name,
       creator: item.artists[0].name,
-      year: item.album.release_date.split('-')[0],
-      imageUrl: item.album.images[0]?.url,
+      year: item.release_date.split('-')[0],
+      imageUrl: item.images[0]?.url,
+      url: item.external_urls.spotify,
       metadata
     };
   });

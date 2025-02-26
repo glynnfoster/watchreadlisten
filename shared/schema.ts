@@ -14,6 +14,7 @@ export const recommendations = pgTable("recommendations", {
   year: text("year").notNull().default(""),
   summary: text("summary").notNull().default(""),
   imageUrl: text("image_url").notNull().default(""),
+  url: text("url").notNull().default(""),
   metadata: jsonb("metadata").notNull().$type<Record<string, any>>().default({}),
 });
 

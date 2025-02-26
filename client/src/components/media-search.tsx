@@ -49,6 +49,7 @@ export default function MediaSearch({ className }: MediaSearchProps) {
         summary: result.summary || "",
         year: result.year || "",
         imageUrl: result.imageUrl || "",
+        url: result.url || "",
         metadata: result.metadata
       });
 

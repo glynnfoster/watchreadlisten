@@ -65,7 +65,7 @@ export function SpotifyCallback() {
 
         await queryClient.invalidateQueries({ queryKey: ['media-search', 'music'] });
 
-        setLocation('/');
+        setLocation('/search');
         window.dispatchEvent(new CustomEvent('spotify-auth-complete', {
           detail: { query: authData.originalQuery }
         }));

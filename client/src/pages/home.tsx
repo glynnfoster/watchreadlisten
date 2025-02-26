@@ -28,9 +28,10 @@ import splashImage from "@/media/recommendations_splash.png";
 interface SortableItemProps {
   recommendation: Recommendation;
   onDelete: (id: number) => void;
+  url: string;
 }
 
-function SortableItem({ recommendation, onDelete }: SortableItemProps) {
+function SortableItem({ recommendation, onDelete, url }: SortableItemProps) {
   const {
     attributes,
     listeners,
@@ -62,6 +63,7 @@ function SortableItem({ recommendation, onDelete }: SortableItemProps) {
       <RecommendationCard
         recommendation={recommendation}
         onDelete={onDelete}
+        url={url}
       />
     </div>
   );
@@ -201,6 +203,7 @@ export default function Home() {
                   key={rec.id}
                   recommendation={rec}
                   onDelete={handleDelete}
+                  url={rec.url}
                 />
               ))}
             </div>
