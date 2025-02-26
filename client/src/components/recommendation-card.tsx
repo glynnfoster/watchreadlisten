@@ -102,7 +102,18 @@ export default function RecommendationCard({
         <div className="flex items-center justify-between">
           <div>
             <div className="font-semibold text-lg mb-1 flex items-center">
-              {recommendation.title}
+              <TooltipProvider>
+                <Tooltip>
+                  <TooltipTrigger>
+                    <span className="whitespace-nowrap overflow-hidden text-ellipsis">
+                      {recommendation.title.length > 27 ? `${recommendation.title.slice(0, 27)}...` : recommendation.title}
+                    </span>
+                  </TooltipTrigger>
+                  <TooltipContent className="max-w-xs whitespace-pre-line">
+                    {recommendation.title}
+                  </TooltipContent>
+                </Tooltip>
+              </TooltipProvider>
               <a href={recommendation.url} target="_blank" rel="noopener noreferrer" className="text-blue-500 hover:underline ml-1">
                 <ExternalLink className="h-3 w-3 text-gray-500" />
               </a>
